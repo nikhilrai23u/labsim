@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import p5 from 'p5';
 import pendulumSim from './pendulum';
 import ohmsLawSim from './ohmsLaw';
+import hookesLawSim from './hookesLaw';
 
 export default function SimulationCanvas({ simulationId, params, running, onData }){
   const ref = useRef(null);
@@ -20,6 +21,8 @@ export default function SimulationCanvas({ simulationId, params, running, onData
           simRef.current = pendulumSim(p, params, onData);
         } else if (simulationId === 'ohmsLaw') {
           simRef.current = ohmsLawSim(p, params, onData);
+        } else if (simulationId === 'hookesLaw') {
+          simRef.current = hookesLawSim(p, params, onData);
         } else {
           // placeholder sim
           simRef.current = {
@@ -42,11 +45,26 @@ export default function SimulationCanvas({ simulationId, params, running, onData
       };
     };
 
+    // ensure no leftover canvas
+    try {
+      if (p5Instance.current) {
+        p5Instance.current.remove();
+      }
+    } catch (e) {}
+    if (ref.current) {
+      ref.current.innerHTML = "";
+    }
+
     p5Instance.current = new p5(sketch);
     return () => {
       try {
-        p5Instance.current.remove();
+        if (p5Instance.current) {
+          p5Instance.current.remove();
+        }
         if (simRef.current?.destroy) simRef.current.destroy();
+        if (ref.current) {
+          ref.current.innerHTML = "";
+        }
       } catch(e){}
     };
     // eslint-disable-next-line
