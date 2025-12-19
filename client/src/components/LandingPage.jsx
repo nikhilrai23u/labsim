@@ -12,7 +12,7 @@ const LandingPage = ({ onGetStarted }) => {
           onClick={onGetStarted}
           className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md transition"
         >
-          Get Started
+          Get Started Here
         </button>
       </nav>
 
